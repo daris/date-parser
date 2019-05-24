@@ -23,7 +23,6 @@ class Date(object):
 
     @staticmethod
     def is_leap_year(year):
-        print(year, year % 100 == 0, year % 400 != 0)
         return year % 4 == 0 and not (year % 100 == 0 and year % 400 != 0)
 
     @staticmethod
@@ -31,11 +30,13 @@ class Date(object):
         if month == 2:
             return 29 if Date.is_leap_year(year) else 28
 
-        if month < 6:
-            return 31 if month % 1 == 0 else 30
+        if month <= 7:
+            return 30 if month % 2 == 0 else 31
 
-        if month > 6:
-            return 31 if month % 1 == 0 else 30
+        if month > 7:
+            return 31 if month % 2 == 0 else 30
+
+        return None
 
 
     def is_valid_date(self):
