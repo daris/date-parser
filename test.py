@@ -13,3 +13,22 @@ assert Date.get_number_of_days_in_month(8) == 31
 assert Date.get_number_of_days_in_month(9) == 30
 assert Date.get_number_of_days_in_month(11) == 30
 assert Date.get_number_of_days_in_month(12) == 31
+
+
+assert Date(31, 1, 2000).is_valid() == True
+assert Date(28, 2, 2000).is_valid() == True
+assert Date(29, 2, 2000).is_valid() == True
+assert Date(28, 2, 2001).is_valid() == True
+assert Date(29, 2, 2001).is_valid() == False
+assert Date(28, 2, 2100).is_valid() == True
+assert Date(29, 2, 2100).is_valid() == False
+
+
+assert (Date(29, 2, 2000) < Date(1, 3, 2000)) == True
+assert (Date(29, 2, 2000) > Date(1, 3, 2000)) == False
+
+assert (Date(28, 2, 2000) < Date(29, 2, 2000)) == True
+assert (Date(28, 2, 2000) > Date(29, 2, 2000)) == False
+
+assert (Date(1, 2, 2000) < Date(1, 2, 2001)) == True
+assert (Date(1, 2, 2000) > Date(1, 2, 2001)) == False
