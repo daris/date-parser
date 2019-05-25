@@ -1,3 +1,6 @@
+import functools
+from os import path
+from sys import argv
 
 
 def get_earliest_date(a, b, c):
@@ -11,19 +14,20 @@ def get_earliest_date(a, b, c):
     ]
 
     valid_dates = [d for d in available_dates if d.is_valid()]
-    print(available_dates)
     if not valid_dates:
         return None
 
-    sorted_dates = sorted(cmp=compare_date)
+    sorted_dates = sorted(valid_dates, key=functools.cmp_to_key(compare_date))
     return sorted_dates[0]
 
 
 def compare_date(d1, d2):
     if d1 > d2:
         return 1
+
     if d1 == d2:
         return 0
+
     if d1 < d2:
         return -1
 
@@ -34,8 +38,8 @@ class Date(object):
         self.month = int(month)
         self.year = int(year)
 
-        if year < 100:
-            year = 2000 + year
+        if self.year < 100:
+            self.year = 2000 + self.year
 
     @staticmethod
     def is_leap_year(year):
@@ -71,7 +75,7 @@ class Date(object):
         return True
 
     def format(self):
-        return '{04d}-{02d}-{02d}'.format(self.year, self.month, self.day)
+        return '{:04d}-{:02d}-{:02d}'.format(self.year, self.month, self.day)
 
     def __str__(self):
         return self.format()
@@ -98,11 +102,25 @@ class Date(object):
         return self.year < other.year
 
 
+def parse_dates(dates):
+    for line in dates:
+        line = line.strip()
+        a, b, c = line.split('/')
+        earliest_date = get_earliest_date(a, b, c)
 
-lines = ['1/2/3', '3/20/1']
+        print('{:<10} => {}'.format(line, earliest_date.format() if earliest_date else 'is illegal'))
 
-for line in lines:
-    a, b, c = line.split('/')
-    earliest_date = get_earliest_date(a, b, c)
 
-    print('{} => {}'.format(line, earliest_date.format() if earliest_date else 'is illegal'))
+if __name__ == "__main__":
+    if len(argv) < 2:
+        print('Filename argument is required')
+        exit()
+
+    filename = argv[1]
+    if not path.isfile(filename):
+        print('File does not exist')
+        exit()
+
+    with open(filename, 'r') as f:
+        lines = f.readlines()
+        parse_dates(lines)
