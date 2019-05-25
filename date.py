@@ -3,35 +3,6 @@ from os import path
 from sys import argv
 
 
-def get_earliest_date(a, b, c):
-    available_dates = [
-        Date(a, b, c),
-        Date(a, c, b),
-        Date(b, a, c),
-        Date(b, c, a),
-        Date(c, a, b),
-        Date(c, b, a),
-    ]
-
-    valid_dates = [d for d in available_dates if d.is_valid()]
-    if not valid_dates:
-        return None
-
-    sorted_dates = sorted(valid_dates, key=functools.cmp_to_key(compare_date))
-    return sorted_dates[0]
-
-
-def compare_date(d1, d2):
-    if d1 > d2:
-        return 1
-
-    if d1 == d2:
-        return 0
-
-    if d1 < d2:
-        return -1
-
-
 class Date(object):
     def __init__(self, day, month, year):
         self.day = int(day)
@@ -100,6 +71,35 @@ class Date(object):
             return self.month < other.month
 
         return self.year < other.year
+
+
+def get_earliest_date(a, b, c):
+    available_dates = [
+        Date(a, b, c),
+        Date(a, c, b),
+        Date(b, a, c),
+        Date(b, c, a),
+        Date(c, a, b),
+        Date(c, b, a),
+    ]
+
+    valid_dates = [d for d in available_dates if d.is_valid()]
+    if not valid_dates:
+        return None
+
+    sorted_dates = sorted(valid_dates, key=functools.cmp_to_key(compare_date))
+    return sorted_dates[0]
+
+
+def compare_date(d1, d2):
+    if d1 > d2:
+        return 1
+
+    if d1 == d2:
+        return 0
+
+    if d1 < d2:
+        return -1
 
 
 def parse_dates(dates):
